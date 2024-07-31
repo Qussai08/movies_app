@@ -33,7 +33,7 @@ class VerticalListCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MovieTitleText(label: movie.title),
+              SizedBox(width: 200, child: MovieTitleText(label: movie.title)),
               SizedBox(height: 8.h),
               MovieRating(rating: movie.vote_average.toStringAsFixed(1)),
               SizedBox(height: 8.h),
