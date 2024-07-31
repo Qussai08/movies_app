@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/src/blocs/bloc_provider.dart';
 import 'package:movies_app/src/blocs/movies_bloc.dart';
-import 'package:movies_app/src/ui/widgets/horizonatl_list_card.dart';
-import 'package:movies_app/src/ui/widgets/movie_rating_widget.dart';
-import 'package:movies_app/src/ui/widgets/movie_title_text.dart';
-import '../../core/constants.dart';
+import 'package:movies_app/src/ui/widgets/app_drawer.dart';
+import '../widgets/home_list_header.dart';
 import '../widgets/horizontal_list.dart';
 import '../widgets/title_text.dart';
+import '../widgets/vertical_list.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -16,10 +15,10 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final MoviesBloc moviesBloc = BlocProvider.of<MoviesBloc>(context)!;
     return Scaffold(
+      drawer: AppDrawer(),
       appBar: AppBar(
         centerTitle: true,
         title: const TitleText(label: 'QMovies'),
-        leading: DrawerButton(),
         actions: [
           Badge.count(
             count: 5,
@@ -32,67 +31,66 @@ class HomeView extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsetsDirectional.only(start: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.h),
-            const TitleText(label: 'Now Showing'),
-            SizedBox(height: 16.h),
-            StreamBuilder(
-              stream: moviesBloc.outNowPlaying,
-              builder: (context, snapshot) {
-                return SizedBox(
-                  height: 283.h,
-                  child: HorizontalListView(
-                    movies: snapshot.data,
-                  ),
-                );
-              },
-            ),
-            SizedBox(height: 24.h),
-            const TitleText(label: 'Popular'),
-            SizedBox(height: 16.h),
-            StreamBuilder(
-              stream: moviesBloc.outPopular,
-              builder: (context, snapshot) {
-                return Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data!.results.length,
-                        itemBuilder: (context, index) {
-                          var movie = snapshot.data!.results[index];
-                          var image =
-                              "${Constants.imageBaseUrl}${movie.poster_path}";
-
-                          return Padding(
-                            padding: EdgeInsetsDirectional.only(bottom: 16.h),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 85.w,
-                                  height: 128.h,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.sp),
-                                      image: DecorationImage(
-                                          image: NetworkImage(image))),
-                                ),
-                                SizedBox(width: 16.w),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    MovieTitleText(label: movie.title),
-                                    SizedBox(height: 8.h),
-                                    MovieRating(rating: movie.vote_average.toStringAsFixed(1)),
-                                    SizedBox(height: 8.h),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        }));
-              },
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 16.h),
+              StreamBuilder(
+                stream: moviesBloc.outNowPlaying,
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      ListHeader(label: 'Now Showing', movies: snapshot.data),
+                      SizedBox(height: 16.h),
+                      SizedBox(
+                        height: 283.h,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: HorizontalListView(
+                            movies: snapshot.data,
+                            maxLength: 5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              SizedBox(height: 24.h),
+              StreamBuilder(
+                stream: moviesBloc.outPopular,
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      ListHeader(label: 'Popular', movies: snapshot.data),
+                      SizedBox(height: 16.h),
+                      VerticalListView(
+                        movies: snapshot.data,
+                        maxLength: 3,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              SizedBox(height: 24.h),
+              StreamBuilder(
+                stream: moviesBloc.outTopRated,
+                builder: (context, snapshot) {
+                  return Column(
+                    children: [
+                      ListHeader(label: 'Top Rated', movies: snapshot.data),
+                      SizedBox(height: 16.h),
+                      VerticalListView(
+                        movies: snapshot.data,
+                        maxLength: 3,
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import '../../models/movies_model.dart';
-import 'horizonatl_list_card.dart';
+import 'vertical_list_card.dart';
 
-class HorizontalListView extends StatelessWidget {
-  const HorizontalListView({
+class VerticalListView extends StatelessWidget {
+  const VerticalListView({
     super.key,
     required this.movies,
     this.maxLength,
@@ -15,11 +14,11 @@ class HorizontalListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return movies == null
         ? const Center(child: CircularProgressIndicator())
-        : Row(
+        : Column(
             children:
                 List.generate(maxLength ?? movies!.results.length, (index) {
             var movie = movies!.results[index];
-            return HorizontalListCard(movie: movie);
+            return VerticalListCard(movie: movie);
           }));
   }
 }
