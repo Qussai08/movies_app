@@ -1,16 +1,25 @@
-# movies_app
+# Movies App
 
-A new Flutter project.
+A Flutter app that explores popular, now-playing, top-rated, and upcoming movies through [TMDB](https://www.themoviedb.org/).
 
-## Getting Started
+## Stack
 
-This project is a starting point for a Flutter application.
+- Flutter and Dart
+- BLoC-style streams with RxDart
+- Dio for HTTP requests
+- TMDB API
 
-A few resources to get you started if this is your first Flutter project:
+## Run locally
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This project deliberately keeps its TMDB read token outside the repository.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter run --dart-define=TMDB_READ_ACCESS_TOKEN=your_token_here
+```
+
+For release builds, inject the same value from your CI secret store. Do not commit tokens, private keys, or signing files.
+
+## Project status
+
+This is a learning and portfolio project. The next improvement is to add test coverage for API failures and loading/error states.
