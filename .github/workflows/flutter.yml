@@ -19,6 +19,11 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-warnings --no-fatal-infos
       - name: Test
-        run: flutter test
+        run: |
+          if find test -name '*_test.dart' -print -quit 2>/dev/null | grep -q .; then
+            flutter test
+          else
+            echo 'No test files yet; build validation continues.'
+          fi
       - name: Build web
         run: flutter build web --release
