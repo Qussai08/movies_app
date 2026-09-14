@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../../models/movies_model.dart';
 import 'vertical_list_card.dart';
@@ -16,7 +18,7 @@ class VerticalListView extends StatelessWidget {
         ? const Center(child: CircularProgressIndicator())
         : Column(
             children:
-                List.generate(maxLength ?? movies!.results.length, (index) {
+                List.generate(min(maxLength ?? movies!.results.length, movies!.results.length), (index) {
             var movie = movies!.results[index];
             return VerticalListCard(movie: movie);
           }));

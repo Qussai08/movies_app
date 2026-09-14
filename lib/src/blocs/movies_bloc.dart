@@ -32,7 +32,9 @@ class MoviesBloc implements BlocBase {
   }
 
   @override
-  dispose() {
+  void dispose() {
     _popularMoviesFetcher.close();
+    _topRatedMoviesFetcher.close();
+    _nowPlayingMoviesFetcher.close();
   }
 }
