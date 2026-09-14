@@ -19,8 +19,11 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-warnings --no-fatal-infos
       - name: Test
+        shell: bash
         run: |
-          if find test -name '*_test.dart' -print -quit 2>/dev/null | grep -q .; then
+          shopt -s nullglob
+          test_files=(test/**/*_test.dart)
+          if ((${#test_files[@]})); then
             flutter test
           else
             echo 'No test files yet; build validation continues.'
