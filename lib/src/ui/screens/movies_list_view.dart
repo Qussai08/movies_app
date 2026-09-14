@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies_app/src/ui/widgets/vertical_list.dart';
+import 'package:movies_app/src/models/movies_model.dart';
 
 import '../widgets/app_drawer.dart';
 import '../widgets/title_text.dart';
@@ -8,7 +9,7 @@ import '../widgets/title_text.dart';
 class MoviesListView extends StatelessWidget {
   const MoviesListView({super.key, required this.title, required this.movies});
   final String title;
-  final movies;
+  final MoviesModel movies;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
