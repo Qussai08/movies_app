@@ -1,0 +1,32 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze --no-fatal-warnings --no-fatal-infos
+      - name: Test
+        shell: bash
+        run: |
+          shopt -s nullglob
+          test_files=(test/**/*_test.dart)
+          if ((${#test_files[@]})); then
+            flutter test
+          else
+            echo 'No test files yet; build validation continues.'
+          fi
+      - name: Build web
+        run: flutter build web --release
