@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../models/movies_model.dart';
@@ -17,7 +19,7 @@ class HorizontalListView extends StatelessWidget {
         ? const Center(child: CircularProgressIndicator())
         : Row(
             children:
-                List.generate(maxLength ?? movies!.results.length, (index) {
+                List.generate(min(maxLength ?? movies!.results.length, movies!.results.length), (index) {
             var movie = movies!.results[index];
             return HorizontalListCard(movie: movie);
           }));
